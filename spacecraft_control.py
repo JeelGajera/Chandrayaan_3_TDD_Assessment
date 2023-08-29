@@ -1,6 +1,8 @@
 def execute_commands(initial_position, initial_direction, commands):
     position = initial_position
     direction = initial_direction
+    # track the previous direction for up and down commands 
+    previous_direction = None
     
     for command in commands:
         if command == "f":
@@ -40,6 +42,25 @@ def execute_commands(initial_position, initial_direction, commands):
                 direction = "N"
             elif direction == "W":
                 direction = "S"
+            # check the previous direction for up and down
+            elif direction == "Up":
+                if previous_direction == "N":
+                    direction = "W"
+                elif previous_direction == "S":
+                    direction = "E"
+                elif previous_direction == "E":
+                    direction = "N"
+                elif previous_direction == "W":
+                    direction = "S"
+            elif direction == "Down":
+                if previous_direction == "N":
+                    direction = "E"
+                elif previous_direction == "S":
+                    direction = "W"
+                elif previous_direction == "E":
+                    direction = "S"
+                elif previous_direction == "W":
+                    direction = "N"
                 
         elif command == "r":
             if direction == "N":
@@ -50,6 +71,33 @@ def execute_commands(initial_position, initial_direction, commands):
                 direction = "S"
             elif direction == "W":
                 direction = "N"
+            # check the previous direction for up and down
+            elif direction == "Up":
+                if previous_direction == "N":
+                    direction = "E"
+                elif previous_direction == "S":
+                    direction = "W"
+                elif previous_direction == "E":
+                    direction = "S"
+                elif previous_direction == "W":
+                    direction = "N"
+                elif previous_direction == "Up":
+                    pass
+                elif previous_direction == "Down":
+                    pass
+            elif direction == "Down":
+                if previous_direction == "N":
+                    direction = "W"
+                elif previous_direction == "S":
+                    direction = "E"
+                elif previous_direction == "E":
+                    direction = "N"
+                elif previous_direction == "W":
+                    direction = "S"
+                elif previous_direction == "Up":
+                    pass
+                elif previous_direction == "Down":
+                    pass
                 
         elif command == "u":
             if direction == "N":
@@ -79,5 +127,13 @@ def execute_commands(initial_position, initial_direction, commands):
             elif direction == "Down":
                 pass
         
+
+        # Check if the spacecraft is within the galactic boundaries
+        if position[0] < -100 or position[0] > 100 or position[1] < -100 or position[1] > 100 or position[2] < -100 or position[2] > 100:
+            raise ValueError("Spacecraft is out of bounds")
+        
+        # dont update the previous direction if the direction is up or down
+        if direction != "Up" and direction != "Down":
+            previous_direction = direction
             
     return position, direction
